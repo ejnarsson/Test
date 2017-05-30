@@ -1,0 +1,2269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2016 rel. 2 sp1 (http://www.altova.com) by August Ejnarsson (Fritidsresor AB) -->
+<xs:schema xmlns="urn:tuinordic:schemas:reservationEvent:v4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:tuinordic:schemas:reservationEvent:v4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.0 unstable 1">
+	<xs:element name="Reservation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ReservationActions" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ReservationAction" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Signals identified events or actions which triggered the reservation version to be published.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ReservationType">
+											<xs:annotation>
+												<xs:documentation>Names the type/part of the reservation affected.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="Accommodation"/>
+													<xs:enumeration value="Flight"/>
+													<xs:enumeration value="Transfer"/>
+													<xs:enumeration value="Ancillary"/>
+													<xs:enumeration value="Package"/>
+													<xs:enumeration value="Insurance"/>
+													<xs:enumeration value="Other"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Action" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Identifies the specific action or event occured.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CommonReservationInfo">
+					<xs:annotation>
+						<xs:documentation>Information common to all parts of the reservation. </xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="BookingStatus">
+								<xs:annotation>
+									<xs:documentation>Overall status for the reservation - Option, Booked and Cancelled. </xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="Option"/>
+										<xs:enumeration value="Booked"/>
+										<xs:enumeration value="Cancelled"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="MainReservationId" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>The reservationnumber as referenced by the source booking application and communicated to customers Allow up to 20 char.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ExternalRefs" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Placeholder for external references.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ExternalRef" type="Reference" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Used for external references, e.g. if a booking is made externally. Allow Ids up to 20 char and names of 80 char. Codes are usually short strings up to 10 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="InternalVersion" type="xs:positiveInteger">
+								<xs:annotation>
+									<xs:documentation>The version of the booking as held in the reservation system internally. Incremented when services or passenger changes, not for e.g. memo or payment amendments.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="VersionNo" type="xs:positiveInteger">
+								<xs:annotation>
+									<xs:documentation>The official version of the booking, incremented for each publish due to any changes. </xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ReservationOriginDate" type="xs:dateTime">
+								<xs:annotation>
+									<xs:documentation>Date the reservation was initially created.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ReservationModifiedDate" type="xs:dateTime" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Date when the reservation was last modified.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TravelDuration" type="xs:positiveInteger" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Duration in days (number of nights) for the travel.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SourceMarket">
+								<xs:annotation>
+									<xs:documentation>Represents a source market by country code. e.g SE, NO etc. </xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:length value="2"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="LocalBrand" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>The name of the brand. Allow up to 20 char.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Passengers">
+								<xs:annotation>
+									<xs:documentation>Placeholder for passengers.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Passenger" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Passenger person information</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="PassengerId">
+														<xs:annotation>
+															<xs:documentation>The Id of the passenger.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Status">
+														<xs:annotation>
+															<xs:documentation>Current, Cancelled or History.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:enumeration value="Current"/>
+																<xs:enumeration value="Cancelled"/>
+																<xs:enumeration value="History"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element ref="Index">
+														<xs:annotation>
+															<xs:documentation>The sequence number of passenger within the booking.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="IsLead" type="xs:boolean">
+														<xs:annotation>
+															<xs:documentation>Indicates if the passenger is responsible/lead (if so, true else false).</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="FirstName" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>Given name, first name or names. Allow up to 70 char.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="LastName" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>Family name, last name. May also be used for full name if the sending system does not have the ability to separate a full name into its parts. Allow up to 70 char.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="DateOfBirth" type="xs:date" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Date of birth in format: YYYY-MM-DD.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="AgeCategory" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Defines the age cateogry the passenger belongs to as defined on product/selleing. E.g. Child, Adult etc.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:enumeration value="Infant"/>
+																<xs:enumeration value="Child"/>
+																<xs:enumeration value="Youth"/>
+																<xs:enumeration value="Adult"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Gender">
+														<xs:annotation>
+															<xs:documentation>The gender of the person in the format: M=Male or F=Female or O=Other. </xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:string">
+																<xs:enumeration value="M"/>
+																<xs:enumeration value="F"/>
+																<xs:enumeration value="O"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Customer">
+								<xs:annotation>
+									<xs:documentation>Person that have reserved the travel and that has contact information. "Payer".</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ExternalCustomerId" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Id of the customer as defined in an external CRM source or similar. Allow up to 30 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="PassengerId" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The Id of a passenger who is the customer if the customer is one of the passengers.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Contact">
+											<xs:annotation>
+												<xs:documentation>Placeholder for contact information to the customer. </xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="PostalAddress" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The contact person's (passenger/customer) post address.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Address" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Main address line.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="AddressLine2" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Optional second address line, rarely used.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="AddressLine3" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Optional third address line, rarely used.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="City" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation source="Description" xml:lang="en">City (e.g., Dublin), town, or postal station (i.e., a postal service territory, often used in a military address).</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ZipCode" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Postal code supposed to cover all source market specific formats.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="Country" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>The name of the country of the passenger/customer address. NB, potentially not exacly the same country as the booking source market. E.g. if a Norwegian customer choses to book their trip from Gothemburg on the tui.se web site paying with their credit card (in Swedish currency).</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Email" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Allow up to 50 char.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="MobilePhone" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>Allow up to 20 char. Mandatory since it is assumed to be used as a primary point of contact.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="HomePhone" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Allow up to 20 char.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="MarketingAllowance" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Indicates the customer's choices of marketing allowance. I.e. allowed via SMS, email, telehpone or post mail.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="AllowViaSMS" type="xs:boolean"/>
+													<xs:element name="AllowViaEmail" type="xs:boolean"/>
+													<xs:element name="AllowViaTelephone" type="xs:boolean"/>
+													<xs:element name="AllowViaMail" type="xs:boolean"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SalesChannel" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Indicates what channel was used for the reservation as defined in the reservation context, e.g. web, call centre, shop etc.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="SalesAgent"/>
+							<xs:element name="OriginalSalesPerson" type="SalesPersonType">
+								<xs:annotation>
+									<xs:documentation>Points out the original (first) sales person who made the booking initially.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="ModifiedSalesPerson"/>
+							<xs:element name="TotalAmount" type="xs:decimal">
+								<xs:annotation>
+									<xs:documentation>The total amount of the booking incl. commission and fees.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TotalAmountExclCommission" type="xs:decimal">
+								<xs:annotation>
+									<xs:documentation>The total amount of the booking excl. commission if the agent is an invoice agent.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element ref="Currency">
+								<xs:annotation>
+									<xs:documentation>Currency code according to ISO 4217 (e.g. SEK, NOK, DKK, EUR) of the reservation price(s). This is the currency for all price records unless other specified.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TOMS" type="xs:decimal" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The tour operator VAT amount if it exist. Only applicable to EU destinations. Some specific EU destinations excluded.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Payment">
+								<xs:annotation>
+									<xs:documentation>Payment information for the reservation, both what is to be paid and what amounts have been paid.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="FullBalanceAmount" type="xs:decimal">
+											<xs:annotation>
+												<xs:documentation>The full balance amount, i.e. the remiaining amaount after deposits to be paid in the given currency.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="FullBalanceDue" type="xs:dateTime">
+											<xs:annotation>
+												<xs:documentation>The date when the full balance at latest must be paid. This is set in relation to the first departure in case there are different departure dates in the booking.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="DepositAmount" type="xs:decimal">
+											<xs:annotation>
+												<xs:documentation>The deposit or partial payment amount in the general currency of the reservation.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="DepositDue" type="xs:dateTime">
+											<xs:annotation>
+												<xs:documentation>The date the payment (of the deposit) is due (paid at latest).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ReceivedPaymentTotalAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total amount paid so far.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="RemainingAmountToPay" type="xs:decimal">
+											<xs:annotation>
+												<xs:documentation>The amount remaining to pay to reach payment of the full balance amount.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ReceivedPayments" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ReceivedPayment" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>A specific payment received. All partial payments have their own records connected to the reservation.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="Amount">
+																	<xs:annotation>
+																		<xs:documentation>The amount of the specific payment in the given currency for the payment.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="Date" type="xs:dateTime">
+																	<xs:annotation>
+																		<xs:documentation>The date and time the payment was registered (on the reservation).</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="Currency">
+																	<xs:annotation>
+																		<xs:documentation>The currency code of the currency for the specific payment.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Reference" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>OCR code or bank reference. Allow up to 50 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element ref="Memos" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Placeholder for memos.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ReservationCancelledDate" type="xs:dateTime" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The date the reservation is/was cancelled if that is the case.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CancellationWithMedicalCertificate" type="xs:boolean" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Indicates if the reservation is/was cancelled and a medical certificate was provided (true).</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="RequiresATI" type="xs:boolean" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Indicates if travelling to the destination(s) of this booking requries additional traveller information (ATI), e.g. passport no, visa etc. If so set to true, else false.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Period" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Reference the period (e.g. season) in which the booking was made. The booking belongs to a period if the first day of the booking is within the boundaries of the booking's configured products.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="Id">
+											<xs:annotation>
+												<xs:documentation>The identifier of the period. E.g. PERIOD-000001</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Name" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>The name of the period. E.g. Summer 18.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="FlightReservations" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="FlightReservation" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Contains all flightreservation information. For a scheduled flight this would equal a PNR.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="ServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier in the reservation system of the service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ReservationServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier, unique within the reservation, identifying the booked service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Added"/>
+										<xs:element ref="SalesAgent" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Represents the sales agent who added this part of the booking. There is always a sales agent although virtual/dummy for internal channels such as web or call centre.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ModifiedSalesPerson"/>
+										<xs:element name="Type">
+											<xs:annotation>
+												<xs:documentation>Type of flight: Scheduled, Charter, Dynamic, ScheduledCharter (partial charter of scheduled flight).</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="Scheduled"/>
+													<xs:enumeration value="Charter"/>
+													<xs:enumeration value="Dynamic"/>
+													<xs:enumeration value="ScheduledCharter"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element ref="Index">
+											<xs:annotation>
+												<xs:documentation>The order of the reservation part/service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Product">
+											<xs:annotation>
+												<xs:documentation>Points out the original static product definition as identified by the original digital source. Allow up to 20 char for the Id. E.g. P-000001234. Name and Code not used in this context.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ProductConfiguration">
+											<xs:annotation>
+												<xs:documentation>Points out the product confiiguration for which this reservation part/service was derived from. Allow up to 20 char. E.g. PC-000012345. Name and Code not used in this context.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Direction">
+											<xs:annotation>
+												<xs:documentation>Indicates direction of transport: Out or In</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="Out"/>
+													<xs:enumeration value="In"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PNR" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Official flight reservation Id in an external reservation system. Used in case of dynamic and possibly scheduled flights.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Reference" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>The official PNR label/code. Allow up to 20 char.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="TicketByDate" type="xs:date" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Date when the PNR must have been ticketed, otherwise it will be cancelled. </xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Source" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>The name of the source GDS, e.g. Amadeus.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="PassengerIds">
+											<xs:annotation>
+												<xs:documentation>Placeholder for passenger Ids of the flight.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="PassengerId" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>The Id of a passenger allocated to the flight.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="BookingStatus" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Status for the flight. Example: OPT - Option, BKG – Booking, CNX - Cancellation. </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ArrivalAirport"/>
+										<xs:element ref="DepartureAirport"/>
+										<xs:element name="Legs">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Leg" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>A overall description of the fligth and collection of all flight legs included in the Flight.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="SubServiceId"/>
+																<xs:element ref="ReservationSubServiceId"/>
+																<xs:element name="FlightNumber" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>The flight number given by either IATA/ICAO or by tour operator.  Example: BLX 4235. </xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="DepartureId" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>Product Id of the departure.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="MarketingCarrier" type="CarrierType">
+																	<xs:annotation>
+																		<xs:documentation>The marketing carrier, i.e. the carrier who sold the flight.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OperatingCarrier" type="CarrierType" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The operating carrier. This is the carrier operating the flight if other than the marketing carrier.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SeatClass" type="SeatClassType">
+																	<xs:annotation>
+																		<xs:documentation>The seat class passengers have finally booked (i.e. upgraded seat class if it exist).</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="BaseCabinClass" type="SeatClassType" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The base seat class defined on the booking.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="ArrivalAirport"/>
+																<xs:element ref="DepartureAirport"/>
+																<xs:element name="DepartureTimeLocal" type="xs:dateTime" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The local time (incl. date of departure.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="DepartureTimeUTC" type="xs:dateTime" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The UTC time (incl. date) the flight departs from the departure airport.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ArrivalTimeLocal" type="xs:dateTime" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The local time (incl. date) of arrival.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ArrivalTimeUTC" type="xs:dateTime" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The UTC time (incl. date) the flight arrives at the destination airport.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="CheckInTime" type="xs:dateTime" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Latest time of checkin (local time). This is usually derived from the local departure time, e.g. one hour before departure.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="Aircraft" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The type of aircraft. Allow for 20 char.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SeatResPossible" type="xs:boolean" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Possible to make seat reservation on leg. 0 equals NO and 1 equals YES. </xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ETicketPossible" type="xs:boolean" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Specifies whether a flight is eligible for electronic ticketing. False equals NO and True equals YES.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ETickets" minOccurs="0">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="ETicket" minOccurs="0" maxOccurs="unbounded">
+																				<xs:annotation>
+																					<xs:documentation>E-ticket information if exists.</xs:documentation>
+																				</xs:annotation>
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element ref="PassengerId">
+																							<xs:annotation>
+																								<xs:documentation>The Id of the specific passenger</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="ETicketReference" type="xs:string" minOccurs="0">
+																							<xs:annotation>
+																								<xs:documentation>The E-Tcketreference for this reservation</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="Luggages" minOccurs="0">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="Luggage" minOccurs="0" maxOccurs="unbounded">
+																				<xs:annotation>
+																					<xs:documentation>A luggage record.</xs:documentation>
+																				</xs:annotation>
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element ref="PassengerId">
+																							<xs:annotation>
+																								<xs:documentation>The Id of the passenger whos luggage it is.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="AllowanceWeight" type="xs:integer" minOccurs="0">
+																							<xs:annotation>
+																								<xs:documentation>The Luggage weight allowed for the flight amount per passenger on the flight reservation, expressed as Kilograms.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="AllowancePieces" type="xs:integer" minOccurs="0">
+																							<xs:annotation>
+																								<xs:documentation>The total number of baggage pieces allowed  for the flight amount per passenger on the flight reservation, expressed as number.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="NumberOfPassengers">
+											<xs:annotation>
+												<xs:documentation>The reserved current occupancy of the accommodation in total in the reservation.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Status"/>
+										<xs:element ref="StatusExtension"/>
+										<xs:element ref="Memos" minOccurs="0"/>
+										<xs:element ref="Erratas" minOccurs="0"/>
+										<xs:element ref="Costs" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Costs placeholder for flight costs.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Prices" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AccommodationReservations" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="AccommodationReservation" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Contains all accommodation reseravtion information.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="ServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier in the reservation system of the service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ReservationServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier, unique within the reservation, identifying the booked service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Added"/>
+										<xs:element ref="SalesAgent" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Represents the sales agent who added this part of the booking. There is always a sales agent although virtual/dummy for internal channels such as web or call centre.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ModifiedSalesPerson"/>
+										<xs:element ref="Index">
+											<xs:annotation>
+												<xs:documentation>The order of the reservation part/service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ArrivalDate" type="xs:date">
+											<xs:annotation>
+												<xs:documentation>Date when the customer arrives/check in to the accommodation. </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="DepartureDate" type="xs:date">
+											<xs:annotation>
+												<xs:documentation>Date when the customer leaves/check out from the accommodation. </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="DurationNights" type="xs:int">
+											<xs:annotation>
+												<xs:documentation>Number of nights for the stay.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SourcingType" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>The type of sourcing used for the accommodation, e.g. Dynamic, Contract.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SourceName" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The name of the source application (external). Specifically used for dynamic bedbank accommodations. Allow up to 50 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SourceAccommodationCode" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>The code used to identify the accommodation as defined by an external source. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="SourceReference" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The official reference of any external source. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Product">
+											<xs:annotation>
+												<xs:documentation>Points out the original static product definition as identified by the original digital source. Allow up to 20 char for the Id. E.g. P-000001234. Code is used for the accommodation code used in contracting and reservation system, e.g. ESGC0012. Name not used at this level.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ProductConfiguration">
+											<xs:annotation>
+												<xs:documentation>Points out the product confiiguration for which this reservation part/service was derived from. Allow up to 20 char for Id. E.g. PC-000012345. Code and Name not used in this context.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:choice>
+											<xs:element name="Concept" type="Reference" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Defines which concept under which the accommodation reservation was made, if any at all. Id is the product context identifier of the concept. Allow up to 20 char. E.g. LIBO-00001234. The Name is the name of the concept, max 50 char. Code is not used in this context.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="Label" type="Reference" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Defines which label under which the accommodation reservation was made, if any at all. Id is the product context identifier of the label. Allow up to 20 char. E.g. LIBO-00001234. The Name is the name of the label, max 50 char. Code is not used in this context.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+										</xs:choice>
+										<xs:element name="Category" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Name of the accommodation category. Hotel, Cruise etc. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="AccommodationSalesName" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>The name of the accommodation as officially in sales channels. Allow up to 80 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="AccommodationSupplierName" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The name of the accommodation as defined by the supplier. Allow up to 80 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Chain" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>If the accommodation belongs to a particular chain.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ChainName" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The official name of the hotel chain if there is any. Allow up to 20 char.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ChainCode" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>If exists, the external code of the hotel chain. Allow up to 10 char.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Geography">
+											<xs:annotation>
+												<xs:documentation>Location of the accommodation</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Country" type="Reference" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Country the accommodation resides in. The Name up to  60 char. Code is the ISO 3166-1 alpha 2 code of the country, e.g. ES. Id not used at this level.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ProductDestination" type="Reference" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Reference to the static product destination the static product's static resort is attached to. The Name up to 80 char. Code 4 char, e.g. ESGC. Id not used at this level.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Resort" type="Reference" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Reference to the static resort which the static product is attached to. Name up to 80 char.  Code 3 char, e.g. ADO.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="RoomTypes">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="RoomType" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>Holds the information about each specific room type.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element ref="SubServiceId">
+																	<xs:annotation>
+																		<xs:documentation>The specific id of the room type part of the reservation. Allow up to 20 char.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="ReservationSubServiceId"/>
+																<xs:element ref="Code">
+																	<xs:annotation>
+																		<xs:documentation>The code of the room type. E.g. DD01. Allow 5 char.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="ProductRoomTypeId" type="xs:string">
+																	<xs:annotation>
+																		<xs:documentation>The official Id of the product room type, e.g. PRT-00000123. Allow up to 20 char.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="RoomGroupId" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Official ID of the room group if exist.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SupplierRoomTypeId" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The Id of the room type as defined by a contracting source or a supplier. E.g. defined by a bedbank. Allow up to 20 char.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="SupplierRoomTypeDescription" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The description or name of the room type as defined by a contracting source. E.g. defined by a bedbank. Allow up to 160 char.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="NumberOfPassengers">
+																	<xs:annotation>
+																		<xs:documentation>The reserved current occupancy of the room type in the reservation.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="PassengerIds">
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element ref="PassengerId" maxOccurs="unbounded">
+																				<xs:annotation>
+																					<xs:documentation>The Id of a passenger allocated in the room if known.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="RoomTypeCategory">
+																	<xs:annotation>
+																		<xs:documentation>The room type category code, e.g. DR (double room), 12 (one room for 2 persons appartment) etc.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:length value="2"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="RoomStandard">
+																	<xs:annotation>
+																		<xs:documentation>The room standard code, e.g. NO, SU etc.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:string">
+																			<xs:length value="2"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="RoomTypeName" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The description of the room type. Allow up to 160 char.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="Bundles" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>List of the dates the inventory is allocated to this reservation with an indication of the inventory allotment the specific date is from bundle or not.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element name="Bundle" minOccurs="0" maxOccurs="unbounded">
+																				<xs:annotation>
+																					<xs:documentation>Bundling information for a specific inventory date.</xs:documentation>
+																				</xs:annotation>
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="Date" type="xs:date">
+																							<xs:annotation>
+																								<xs:documentation>The inventory date.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																						<xs:element name="Bundled" type="xs:boolean">
+																							<xs:annotation>
+																								<xs:documentation>True if the inventory this date in the reservation is from the bundled allotment.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="Classification" type="xs:string" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Room classification. E.g. 3, 3+ etc.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="OriginalBoard" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The basic board from which a potential upgrade was made from.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element ref="Id">
+																				<xs:annotation>
+																					<xs:documentation>Unique identifier of the board. E.g. LIBO-000408. Allow up to 20 char.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="Name" type="xs:string">
+																				<xs:annotation>
+																					<xs:documentation>The name of the board, e.g. Half Board. Allow up to 60 char.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="Code" type="xs:string">
+																				<xs:annotation>
+																					<xs:documentation>Code for the board, e.g. HB (half board). Codes as defined in the reservation system. Usually 2 char, allow up to 5.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="SupplierRef" type="Reference" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>Supplier reference to Board included in the booking. Allow Id up to 20 char, code up to 10 char and name up to 60 char.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="Board" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Board  inxcuded in the reservation </xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:sequence>
+																			<xs:element ref="Id">
+																				<xs:annotation>
+																					<xs:documentation>Unique identifier of the board. E.g. LIBO-000408. Allow up to 20 char.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="Name" type="xs:string">
+																				<xs:annotation>
+																					<xs:documentation>The name of the board, e.g. Half Board. Allow up to 60 char.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="Code" type="xs:string">
+																				<xs:annotation>
+																					<xs:documentation>Code for the board, e.g. HB (half board). Codes as defined in the reservation system. Usually 2 char, allow up to 5.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="SupplierRef" type="CodeNameType" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>Supplier reference to Board included in the booking. Allow code up to 10 char and name up to 60 char.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element ref="Price" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>Board price.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element ref="Cost" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>The board cost base, if any.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element ref="Prices" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Prices for the specific room type.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="Costs" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>Costs placeholder for room costs.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="TotalSummaryPriceAmount" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The total price amount to display as a summary on this part of the reservation/this service.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element name="TotalPriceAmount" type="xs:decimal" minOccurs="0">
+																	<xs:annotation>
+																		<xs:documentation>The total price amount.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+																<xs:element ref="Erratas" minOccurs="0"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="NumberOfPassengers">
+											<xs:annotation>
+												<xs:documentation>The reserved current occupancy of the accommodation in total in the reservation.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Status"/>
+										<xs:element ref="StatusExtension"/>
+										<xs:element ref="Memos" minOccurs="0"/>
+										<xs:element ref="Erratas" minOccurs="0"/>
+										<xs:element name="TotalPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total price amount of this accommodation reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalSummaryPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total summary price amount (to display) for this accommodation reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TransferReservations" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TransferReservation" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Contains all transfer reservation information.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="ServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier in the reservation system of the service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ReservationServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier, unique within the reservation, identifying the booked service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="SubServiceId"/>
+										<xs:element ref="ReservationSubServiceId"/>
+										<xs:element ref="Added"/>
+										<xs:element ref="SalesAgent" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Represents the sales agent who added this part of the booking. There is always a sales agent although virtual/dummy for internal channels such as web or call centre.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ModifiedSalesPerson"/>
+										<xs:element ref="Index">
+											<xs:annotation>
+												<xs:documentation>The order of the reservation part/service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Date" type="xs:date">
+											<xs:annotation>
+												<xs:documentation>Date when the customer has booked the transfer. </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Product">
+											<xs:annotation>
+												<xs:documentation>Points out the original static product definition as identified by the original digital source. Allow up to 20 char for Id, e.g. P-000001234. Code and Name not used in this context.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ProductConfiguration">
+											<xs:annotation>
+												<xs:documentation>Points out the product confiiguration for which this reservation part/service was derived from. Allow up to 20 char for Id, e.g. PC-000012345. Code and Name not used in this context.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="CategoryId" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Holds the ID of the transfer category. E.g. LIBO-0000123.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Description" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>The textual description of the transfer. That is the only way to see what the transfer is at this level. For details, see the product definition referenced. Allow up to 80 char. Example "Bus from Las Palmas to Mas Palomas".</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="NumberOfPassengers">
+											<xs:annotation>
+												<xs:documentation>The reserved current number of passengers of the transfer in total in the reservation.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Status"/>
+										<xs:element ref="StatusExtension"/>
+										<xs:element name="PassengerIds" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="PassengerId" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>The Id of a passenger who is expected to use the transfer, if known.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="Memos" minOccurs="0"/>
+										<xs:element ref="Erratas" minOccurs="0"/>
+										<xs:element name="TotalPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total price amount of this transfer reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalSummaryPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total summary price amount (to display) for this transfer reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Costs" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Costs for the transfer. Can potentially be multiple costs in case of combination of adults and children.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Prices" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Prices for the transfer. Can potentially be multiple costs in case of combination of adults and children.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AncillaryReservations" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="AncillaryReservation" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Contains all ancillary reservation information.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="ServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier in the reservation system of the service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ReservationServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier, unique within the reservation, identifying the booked service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="SubServiceId"/>
+										<xs:element ref="ReservationSubServiceId"/>
+										<xs:element name="Parent">
+											<xs:annotation>
+												<xs:documentation>References to the ancillary's context, either the master product (accom., flight etc.) or airport, resort or destination.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="ParentServiceIndex" type="xs:int" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The index of the parent service. E.g. the flight to which a flight meal.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element ref="Id">
+														<xs:annotation>
+															<xs:documentation>The product ID of the parent product.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Type" type="xs:string">
+														<xs:annotation>
+															<xs:documentation>What type of parent product. Accommodation, Flight, Package, Cruise, Airport, Resort, Destination, Transfer.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="Added"/>
+										<xs:element ref="SalesAgent" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Represents the sales agent who added this part of the booking. There is always a sales agent although virtual/dummy for internal channels such as web or call centre.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ModifiedSalesPerson"/>
+										<xs:element ref="Index">
+											<xs:annotation>
+												<xs:documentation>The order of the reservation part/service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Start" type="xs:dateTime">
+											<xs:annotation>
+												<xs:documentation>Date and time when the customer has booked the ancillary from.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Duration" type="xs:int" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The number of days/nights the ancillary is booked for.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="End" type="xs:dateTime">
+											<xs:annotation>
+												<xs:documentation>Date and time until the customer has booked the ancillary.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Product">
+											<xs:annotation>
+												<xs:documentation>Points out the original static product definition as identified by the original digital source. Allow up to 20 char for Id, e.g. P-000001234. Code represents the product's code up to 12 char an Name represents the name of the ancillary.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ProductConfiguration">
+											<xs:annotation>
+												<xs:documentation>Points out the product confiiguration for which this reservation part/service was derived from. Allow up to 20 char for Id e.g. PC-000012345. Name and Code not used in this context.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="NumberOfPassengers">
+											<xs:annotation>
+												<xs:documentation>The reserved current number of passengers of the ancillary in total in the reservation.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Status"/>
+										<xs:element ref="StatusExtension"/>
+										<xs:element name="PassengerIds" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="PassengerId" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>The Id of a passenger for whom the ancillary reservation is valid for if personal.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="Memos" minOccurs="0"/>
+										<xs:element ref="Erratas" minOccurs="0"/>
+										<xs:element name="TotalPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total price amount of this ancillary reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalSummaryPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total summary price amount (to display) for this ancillary reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Costs" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Costs of the ancillary. Can be multiple in case of different cost for adult and children.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Prices" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Ancillary prices. Thse can be more than one of the same ancillary in case of e.g. different adult and child price.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PackageReservations" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="PackageReservation" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Contains all package (pre-package) and combination reservation information.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="ServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier in the reservation system of the service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ReservationServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier, unique within the reservation, identifying the booked service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Added"/>
+										<xs:element ref="SalesAgent" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Represents the sales agent who added this part of the booking. There is always a sales agent although virtual/dummy for internal channels such as web or call centre.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ModifiedSalesPerson"/>
+										<xs:element ref="Index">
+											<xs:annotation>
+												<xs:documentation>The order of the reservation part/service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ArrivalDate" type="xs:date">
+											<xs:annotation>
+												<xs:documentation>Date when the customer is starting experiencing the package. </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="DepartureDate" type="xs:date">
+											<xs:annotation>
+												<xs:documentation>The last date of the package experience for the customer. </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Duration" type="xs:int">
+											<xs:annotation>
+												<xs:documentation>Number of nights for the stay.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Product">
+											<xs:annotation>
+												<xs:documentation>Points out the original static product definition as identified by the original digital source. Allow Id up to 20 char, e.g. P-000001234, Code is the official code of the package up to 20 char and Name up to 160 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ProductConfiguration">
+											<xs:annotation>
+												<xs:documentation>Points out the product confiiguration for which this reservation part/service was derived from. Allow up to 20 char for Id, e.g. PC-000012345</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Category" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Name of the package category. Allow up to 40 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="NumberOfPassengers">
+											<xs:annotation>
+												<xs:documentation>The reserved current number of passengers of the package in total in the reservation.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Status"/>
+										<xs:element ref="StatusExtension"/>
+										<xs:element name="PassengerIds" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="PassengerId" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>The Id of a passenger for whom the package is booked.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="Memos" minOccurs="0"/>
+										<xs:element ref="Erratas" minOccurs="0"/>
+										<xs:element name="TotalPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total price amount of this package reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalSummaryPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total summary price amount (to display) for this package reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Costs" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Costs placeholder for package costs.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Price" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Price element for the package. I.e. the total price of the package.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Insurances" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Insurance" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Contains insurance reservation information.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="ServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier in the reservation system of the service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ReservationServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier, unique within the reservation, identifying the booked service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="SubServiceId"/>
+										<xs:element ref="ReservationSubServiceId"/>
+										<xs:element ref="Added"/>
+										<xs:element ref="SalesAgent" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Represents the sales agent who added this part of the booking. There is always a sales agent although virtual/dummy for internal channels such as web or call centre.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ModifiedSalesPerson"/>
+										<xs:element ref="Index">
+											<xs:annotation>
+												<xs:documentation>The order of the reservation part/service.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="InsuranceProductId" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>The particular official ID of the insurance product, which can be used in communication with the supplier.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="InsurancePremiumCurrency">
+											<xs:annotation>
+												<xs:documentation>The insurance currency.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:length value="3"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="InsurancePremiumAmount" type="xs:decimal">
+											<xs:annotation>
+												<xs:documentation>The insurance amount.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="NumberOfPassengers">
+											<xs:annotation>
+												<xs:documentation>The reserved current number of passengers with the insurance.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Status"/>
+										<xs:element ref="StatusExtension"/>
+										<xs:element name="PassengerIds">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="PassengerId" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>The Id of a passenger which the insurance is valid for.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="TotalPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total price amount of this insurance reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalSummaryPriceAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The total summary price amount (to display) for this insurance reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Costs" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Cost elements for the insurance.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Prices" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Price elements for the insurance.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Fees" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Fee" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Represents a reservation fee such as a service or cancellation fee.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="ServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier in the reservation system of the service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="ReservationServiceId">
+											<xs:annotation>
+												<xs:documentation>The identifier, unique within the reservation, identifying the booked service. Allow up to 20 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="SubServiceId"/>
+										<xs:element ref="ReservationSubServiceId"/>
+										<xs:element ref="Added"/>
+										<xs:element ref="Index">
+											<xs:annotation>
+												<xs:documentation>The order of the reservation part.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Type">
+											<xs:annotation>
+												<xs:documentation>The type of fee.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="Booking"/>
+													<xs:enumeration value="Cancellation"/>
+													<xs:enumeration value="Amendment"/>
+													<xs:enumeration value="NameChange"/>
+													<xs:enumeration value="Other"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="PassengerIds" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element ref="PassengerId" minOccurs="0" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>The Id of a passenger for whom the ancillary reservation is valid for if personal.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element ref="PriceCode" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Code associated with the price or cost. Incl. name of the code. Allow up to 5 char for the code.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element ref="Amount">
+											<xs:annotation>
+												<xs:documentation>The amount in the fee.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="AmountExTax" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The amount excl. tax.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="messageId" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>A GUID identifying the distinct origin message.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="messageCreated" type="xs:dateTime" use="required">
+				<xs:annotation>
+					<xs:documentation>A time stamp indicating when the origin message was created.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="schemaVersion" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>The version of the schema the particular XML instance is based upon.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="source" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>The system that has produced this event. E.G CRS or Rose</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="TransferEndpointType">
+		<xs:complexContent>
+			<xs:extension base="Reference">
+				<xs:sequence>
+					<xs:element name="Type">
+						<xs:annotation>
+							<xs:documentation>Defines what type of transportation station - airport, train station etc.</xs:documentation>
+						</xs:annotation>
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="Airport"/>
+								<xs:enumeration value="TrainStation"/>
+								<xs:enumeration value="Harbour"/>
+								<xs:enumeration value="BusStop"/>
+								<xs:enumeration value="AccommodationProductConfiguration"/>
+								<xs:enumeration value="ResortConfiguration"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Reference">
+		<xs:annotation>
+			<xs:documentation>An extended reference type including name and code. The purpose is for consumers to quickly be able to get names and codes directly in the message instead of having to lookup the source entity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="Id">
+				<xs:annotation>
+					<xs:documentation>Unique identifier of the entity. Contruct and length depending on context. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Name" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The name of the entity instance. Length depending on context.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Code" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The code of the entity instance.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AirPortType">
+		<xs:sequence>
+			<xs:element name="AirportCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The standard IATA Airport code for the sector starting point.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AirportName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The official name of the airport, e.g. Arlanda. Allow up to 50 char.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Terminal" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Arrival or departure terminal (e.g., 5)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AmountType">
+		<xs:sequence>
+			<xs:element name="Type" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Type of cost.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Currency">
+				<xs:annotation>
+					<xs:documentation>Currenccy code in ISO 4217 </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Amount">
+				<xs:annotation>
+					<xs:documentation>The amount in the given currency.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CarrierType">
+		<xs:sequence>
+			<xs:element name="CarrierCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The IATA or ICAO code of the carrier. Example: SK</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CarrierName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The name of the carrier, i.e. the airline. Example: SAS</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SeatClassType">
+		<xs:sequence>
+			<xs:element name="ClassCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Booking class code (e.g. K).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ClassName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Class name e.g = Economy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CodeNameType">
+		<xs:sequence>
+			<xs:element ref="Code"/>
+			<xs:element name="Name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Allow up to 30 char.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Amount" type="xs:decimal"/>
+	<xs:element name="Currency">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:length value="3"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="Id" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Unique identifier of the entity. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Index" type="xs:integer"/>
+	<xs:element name="Erratas">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Errata" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>An errata record, a specific notification message or correction associated with the reservation part. For flights, information about stops might be included in an errata. Other examples are restrictions in luggage or meals.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Memos">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Memo" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>A memo record. I.e. a message associated with the specific reservation part.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Prices">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Price" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Price entry of the reservation part.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Code" type="xs:string"/>
+	<xs:element name="ServiceId" type="xs:string"/>
+	<xs:element name="NumberOfPassengers">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CurrentNoOfPassengers" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Total number of passengers allocated to the room type in the reservation.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CurrentNoOfChildren" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Total number of children allocated to the room type in the reservation.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CurrentNoOfInfants" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Total number of infants allocated to the room type in the reservation.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CurrentNoOfAdults" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Total number of adults allocated to the room type in the reservation.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Cost">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PriceCode" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Code associated with the price or cost. Incl. name of the code. Allow up to 5 char for the code.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PriceId"/>
+				<xs:element ref="Amount">
+					<xs:annotation>
+						<xs:documentation>The cost amount in the cost currency.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="Currency">
+					<xs:annotation>
+						<xs:documentation>The currency code of the cost currency.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Status" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The status of the cost as defined by the reservation system.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Quantity" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Number of pieces.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AmountExTax" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The cost amount excl. tax.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AmountInSellingCurrency" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The cost amount recalculated to selling currency.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PerPassengers"/>
+				<xs:element name="Contract" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Reference to contract if the cost is defined in an explicit contract. 20 char.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ContractVersion" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The version of the contract if it exist. Up to 30 char.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CommitmentLevel" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates the level of commitment of the contract if it exist. Full, Partial or None.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FullFarePayingPaxIndicator" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates how a passenger is included in the cost of a room in terms of being a full fare paying pax. Room, Person or None.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FullFarePayingPaxQuantity" type="xs:unsignedShort" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The number of full fare paying pax.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Price">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PriceCode" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Code associated with the price or cost. Incl. name of the code. Allow the code to be up to 5 char.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PriceId"/>
+				<xs:element name="Status" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The status of the price as defined by the reservation system.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Quantity" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Number of pieces.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AmountPerPiece" type="xs:decimal">
+					<xs:annotation>
+						<xs:documentation>Price amount per piece.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="TotalAmount" type="xs:decimal">
+					<xs:annotation>
+						<xs:documentation>Total amount (no pieces x amount per piece)</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AgentCommissionPriceBase" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The amount which the commission is based upon.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="AgentCommissionAmount" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The commission amount.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element ref="PerPassengers"/>
+				<xs:element name="VAT" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Value added tax related to the price.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="VATType" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Type of VAT. Allow up to 30 char.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Taxes" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Tax" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>A general tax record associated with the price.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TaxableRate" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The rate which is the basis for the tax.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TaxType" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The type of tax. Allow up to 30 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TaxIncluded" type="xs:boolean" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Indicates if the tax is included in the price (true) or not (false).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TaxRate" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The tax rate (cost basis).</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TaxAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>The amount of the tax itself.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="MarginTaxCompensationAmount" type="xs:decimal" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Margin tax compensation amount.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Status" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Confirmed, On Request, Cancelled</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="StatusExtension" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Satisfied, Satisfied advised, Denied, Retained cancellation, Referenced cancellation</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Memo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Index">
+					<xs:annotation>
+						<xs:documentation>The order of the memo.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Type" type="CodeNameType">
+					<xs:annotation>
+						<xs:documentation>Code and name of the memo type. I.e. its definition in the source reservation application.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Added" type="xs:dateTime">
+					<xs:annotation>
+						<xs:documentation>The date and time when the memo was created and added to the reservation.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ShowOnConfirmation" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Flag if the memo text should be shown on confirmations (true=show, false=do not show).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ShowOnVoucher" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Flag if the memo text should be shown on vouchers or digital equivalent (true=show, false=do not show).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Text" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The text of the memo, i.e. the message. Allow up to 400 char.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Errata">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Index">
+					<xs:annotation>
+						<xs:documentation>The order of the errata.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Type" type="CodeNameType">
+					<xs:annotation>
+						<xs:documentation>Code and name of the errata type. I.e. its definition in the source reservation application. Allow 5 char for the code.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Added" type="xs:dateTime">
+					<xs:annotation>
+						<xs:documentation>The date and time when the errata was created and added to the reservation.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ShowOnConfirmation" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Flag if the errata text should be shown on confirmations (true=show, false=do not show).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="ShowOnVoucher" type="xs:boolean">
+					<xs:annotation>
+						<xs:documentation>Flag if the errata text should be shown on vouchers or digital equivalent (true=show, false=do not show).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Texts">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Text" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>List of errata texts. One errata can contain several texts/notes.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="Index">
+											<xs:annotation>
+												<xs:documentation>The order or the errata note/text.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ActualText" type="xs:string">
+											<xs:annotation>
+												<xs:documentation>An errata text. Allow up to 400 char.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PassengerId" type="xs:int">
+		<xs:annotation>
+			<xs:documentation>The Id of a passenger allocated in the room</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="PriceCode" type="CodeNameType">
+		<xs:annotation>
+			<xs:documentation>Code associated with the price or cost. Incl. name of the code.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="SalesAgent">
+		<xs:annotation>
+			<xs:documentation>Represents the initial sales agent for this booking. There is always a sales agent although virtual/dummy for internal channels such as web or call centre.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="AgentId" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The Id of the agent. Usually  5 char, allow up to 15.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Name" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The agent's name. Allow up to 30 char.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Commission" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The commission amount for this particular reservation for the agent.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CommissionDue" type="xs:date" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The due date, when the commission should be paid.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CommissionTax" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>VAT/tax on agent's commission.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="VATNo" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The agent's VAT number.  Allow up to 20 char.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="IsInvoiceAgent" type="xs:boolean" default="false" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Indicates if the agent will charge the customer directly (true) or not (false). TUI would in such cases invoice the agent the sales amount-commission.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="SalesPersonType">
+		<xs:sequence>
+			<xs:element name="Id" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The Id of the sales representative (person). Allow up to 20 char.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="UserName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The name of the sales representative. Allow up to 30 char.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Added" type="xs:dateTime">
+		<xs:annotation>
+			<xs:documentation>The date and time this part of the reservation was added.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ModifiedSalesPerson" type="SalesPersonType">
+		<xs:annotation>
+			<xs:documentation>Points out the sales person who made the last change on the booking.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ArrivalAirport" type="AirPortType">
+		<xs:annotation>
+			<xs:documentation>The arrival airport of the flight.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="DepartureAirport" type="AirPortType">
+		<xs:annotation>
+			<xs:documentation>The departure airport of the flight.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Costs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Cost" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Cost element.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ReservationServiceId" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>The identifier, unique within the reservation, identifying the service reserved.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="SubServiceId" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>The identifier in the reservation system of the sub service. Allow up to 20 char.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ReservationSubServiceId" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>The identifier, unique within the reservation, identifying the booked sub service. Allow up to 20 char.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="PerPassengers">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PerPassenger" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PerPassenger">
+		<xs:annotation>
+			<xs:documentation>Price breakdown record for specfic passengers of the reservation.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="PassengerId">
+					<xs:annotation>
+						<xs:documentation>The Id of the passenger.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Amount" type="xs:decimal">
+					<xs:annotation>
+						<xs:documentation>The amount related to the specific passenger.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PriceRound" type="xs:decimal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>The rounding amount.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="PriceId" type="xs:integer">
+		<xs:annotation>
+			<xs:documentation>Id of the price as referenced in the reservation system. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ProductId" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Points out the original static product definition as identified by the original digital source. Allow up to 20 char. E.g. P-000001234</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ProductConfiguration" type="Reference">
+		<xs:annotation>
+			<xs:documentation>Points out the product confiiguration for which this reservation part/service was derived from.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Product" type="Reference">
+		<xs:annotation>
+			<xs:documentation>Points out the original static product definition as identified by the original digital source.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ProductConfigurationId" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Points out the product confiiguration for which this reservation part/service was derived from. Allow up to 20 char. E.g. PC-000012345</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+</xs:schema>
