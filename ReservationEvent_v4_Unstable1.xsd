@@ -42,7 +42,7 @@
 				</xs:element>
 				<xs:element name="CommonReservationInfo">
 					<xs:annotation>
-						<xs:documentation>Information common to all parts of the reservation. </xs:documentation>
+						<xs:documentation>This information common to all parts of the reservation. </xs:documentation>
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>
