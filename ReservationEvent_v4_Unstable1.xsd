@@ -1609,6 +1609,7 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="TEST"/>
 			</xs:sequence>
 			<xs:attribute name="messageId" type="xs:string" use="required">
 				<xs:annotation>
